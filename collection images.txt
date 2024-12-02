@@ -1,0 +1,147 @@
+{% schema %}
+{
+  "name": "Two Images",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "image_block",
+      "name": "Image Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Overlay Text"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "bil-image"
+    }
+  ]
+}
+{% endschema %}
+
+<div class="two-images-section">
+  {% for block in section.blocks %}
+    <div class="image-container">
+      <a href="{{ block.settings.link }}" class="image-link">
+        <div class="image-wrapper">
+          <img
+            src="{{ block.settings.image | img_url: '1600x' }}"
+            alt="{{ block.settings.text }}"
+            class="image"
+          >
+          <div class="hover-fill"></div>
+          <!-- Background fill on hover -->
+        </div>
+        <span class="overlay-text">{{ block.settings.text }}</span>
+      </a>
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+  .two-images-section {
+    display: flex;
+    justify-content: center; /* Center the section */
+    gap: 15px; /* Add spacing between containers */
+    flex-wrap: wrap;
+  }
+
+  .image-container {
+    flex: 0 1 calc(45% - 15px); /* Reduced width: 45% of the row */
+    position: relative;
+    overflow: hidden;
+    height: 100%; /* Height remains the same */
+  }
+
+  .image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the image fills the container */
+    object-position: top; /* Prioritizes the top of the image */
+    transition: transform 0.3s ease; /* Smooth zoom effect */
+  }
+
+  .image-wrapper:hover .image {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+  }
+
+  .hover-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0); /* No fill by default */
+    transition: background-color 0.3s ease;
+    z-index: 1; /* Below text but above the image */
+  }
+
+  .image-wrapper:hover .hover-fill {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black fill on hover */
+  }
+
+  .overlay-text {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: 2px solid white;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 2;
+  }
+
+  .image-link {
+    text-decoration: none;
+    display: block;
+  }
+  .overlay-text:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  /* Mobile Layout */
+  @media (max-width: 768px) {
+    .two-images-section {
+      flex-direction: column;
+    }
+    .image-container {
+      flex: 1 1 100%;
+      margin-bottom: 10px;
+      height: 350px; /* Adjusted height for mobile view */
+    }
+  }
+    @media (max-width: 768px) {
+    .overlay-text {
+      font-size: 17px;
+    }
+  }
+    @media (min-width: 768px) {
+    .two-images-section {
+      padding-bottom: 45px;
+  }
+  }
+
+   
+</style>
